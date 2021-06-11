@@ -2,8 +2,8 @@ version: '3'
 
 services:
   emqx:
-    restart: always
     image: emqx/emqx:latest
+    restart: always
     environment:
       EMQX_NAME: emqx_docker
       EMQX_HOST: 127.0.0.1
@@ -22,45 +22,24 @@ services:
       - MYSQL_ROOT_PASSWORD=mysql
       - TZ=Asia/Seoul
     volumes:
-      - ./sql/:/docker-entrypoint-initdb.d/
-
-  rosemarydb:
-    restart: always
-    image: mysql
-    ports:
-      - "3307:3306"
-    environment:
-      - MYSQL_DATABASE=mobiusdb
-      - MYSQL_ROOT_PASSWORD=mysql
-      - TZ=Asia/Seoul
-    volumes:
-      - ./sql/:/docker-entrypoint-initdb.d/
+      - ./mobius/mobius/sql/:/docker-entrypoint-initdb.d/
 
   mobius:
     restart: always
-    image: nalsm0518/mobius:1.0
+    image: nalsm0518/mobius:2.0
     depends_on:
       - mobiusdb
       - emqx
+    build: ./mobius
     ports:
       - 7579:7579
 
-  rosemary:
-    restart: always
-    image: nalsm0518/rosemary:1.0
-    depends_on:
-      - rosemarydb
-      - emqx
-      - mobius
-    ports:
-      - 7599:7599
-
   thyme:
-    image: nalsm0518/thyme:1.0
     restart: always
+    image: nalsm0518/thyme:2.0
     depends_on:
       - emqx
       - mobius
-      - rosemary
+    build: ./thyme-nodejs-main
     ports:
       - 9727:9727
