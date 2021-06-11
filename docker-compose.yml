@@ -30,7 +30,6 @@ services:
     depends_on:
       - mobiusdb
       - emqx
-    build: ./mobius
     ports:
       - 7579:7579
 
@@ -40,6 +39,5 @@ services:
     depends_on:
       - emqx
       - mobius
-    build: ./thyme-nodejs-main
     ports:
       - 9727:9727
