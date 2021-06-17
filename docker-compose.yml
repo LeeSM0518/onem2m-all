@@ -22,7 +22,7 @@ services:
       - MYSQL_ROOT_PASSWORD=mysql
       - TZ=Asia/Seoul
     volumes:
-      - ./mobius/mobius/sql/:/docker-entrypoint-initdb.d/
+      - ./sql/:/docker-entrypoint-initdb.d/
 
   mobius:
     restart: always
